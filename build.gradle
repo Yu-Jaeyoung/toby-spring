@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.postgresql:postgresql:42.7.5'
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
