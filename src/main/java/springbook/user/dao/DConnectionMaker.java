@@ -1,13 +1,16 @@
 package springbook.user.dao;
 
+import springbook.user.conf.Conf;
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DConnectionMaker implements ConnectionMaker {
 
     @Override
     public Connection makeConnection() throws ClassNotFoundException, SQLException {
-        // D 사의 독자적인 방법으로 Connection 을 생성하는 코드
-        return null;
+        Class.forName("org.postgresql.Driver");
+        return DriverManager.getConnection(Conf.DB_URL, Conf.DB_USER, Conf.DB_PASSWORD);
     }
 }
