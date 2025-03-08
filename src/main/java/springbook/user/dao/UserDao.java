@@ -8,8 +8,13 @@ import java.sql.*;
 
 public class UserDao {
     private DataSource dataSource;
+    private JdbcContext jdbcContext;
 
     public UserDao() {
+    }
+
+    public void setJdbcContext(JdbcContext jdbcContext) {
+        this.jdbcContext = jdbcContext;
     }
 
     public void setDataSource(DataSource dataSource) {
@@ -17,7 +22,7 @@ public class UserDao {
     }
 
     public void add(final User user) throws SQLException {
-        jdbcContextWithStatementStrategy(
+        this.jdbcContext.workWithStatementStrategy(
                 new StatementStrategy() {
                     @Override
                     public PreparedStatement makePreparedStatement(final Connection c) throws SQLException {
@@ -58,7 +63,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        jdbcContextWithStatementStrategy(
+        this.jdbcContext.workWithStatementStrategy(
                 new StatementStrategy() {
                     @Override
                     public PreparedStatement makePreparedStatement(final Connection c) throws SQLException {
