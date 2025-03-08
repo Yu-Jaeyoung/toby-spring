@@ -155,6 +155,9 @@ Temporary Items
 ### Configuration ###
 src/main/java/springbook/user/conf/
 
+### Properties ###
+src/main/resources/database.properties
+
 # Created by https://www.toptal.com/developers/gitignore/api/gradle
 
 ### Gradle ###
