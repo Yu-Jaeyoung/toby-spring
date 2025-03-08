@@ -10,7 +10,8 @@ import springbook.user.domain.User;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -23,19 +24,39 @@ public class UserDaoTest {
         UserDao dao = context.getBean("userDao", UserDao.class);
 
         dao.deleteAll();
-        assertEquals(0, dao.getCount());
+        assertThat(dao.getCount(), is(0));
 
-        User user = new User();
-        user.setId("jack");
-        user.setName("jaeyoung");
-        user.setPassword("password");
+
+        User user = new User("jack", "jaeyoung", "password");
 
         dao.add(user);
-        assertEquals(1, dao.getCount());
+        assertThat(dao.getCount(), is(1));
 
         User user2 = dao.get(user.getId());
 
-        assertEquals(user.getName(), user2.getName(), "이름이 일치해야 합니다.");
-        assertEquals(user.getPassword(), user2.getPassword(), "패스워드가 일치해야 합니다.");
+        assertThat(user2.getName(), is(user.getName()));
+        assertThat(user2.getPassword(), is(user.getPassword()));
+    }
+
+    @Test
+    void count() throws SQLException {
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+
+        UserDao dao = context.getBean("userDao", UserDao.class);
+        User user1 = new User("tom", "톰", "password");
+        User user2 = new User("Tim", "팀", "password");
+        User user3 = new User("Jay", "제이", "password");
+
+        dao.deleteAll();
+        assertThat(dao.getCount(), is(0));
+
+        dao.add(user1);
+        assertThat(dao.getCount(), is(1));
+
+        dao.add(user2);
+        assertThat(dao.getCount(), is(2));
+
+        dao.add(user3);
+        assertThat(dao.getCount(), is(3));
     }
 }
