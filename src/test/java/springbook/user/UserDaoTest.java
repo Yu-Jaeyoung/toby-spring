@@ -1,9 +1,8 @@
 package springbook.user;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import springbook.user.dao.UserDao;
@@ -19,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ContextConfiguration(locations = "/applicationContext.xml")
 public class UserDaoTest {
 
+    @Autowired
+    private UserDao dao;
+
     @Test
     void addAndGet() throws SQLException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
         User user1 = new User("park", "박", "password");
         User user2 = new User("Han", "한", "password");
 
@@ -45,9 +44,6 @@ public class UserDaoTest {
 
     @Test
     void count() throws SQLException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
         User user1 = new User("tom", "톰", "password");
         User user2 = new User("Tim", "팀", "password");
         User user3 = new User("Jay", "제이", "password");
@@ -67,9 +63,6 @@ public class UserDaoTest {
 
     @Test
     public void getUserFailure() throws SQLException {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-
-        UserDao dao = context.getBean("userDao", UserDao.class);
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
 
