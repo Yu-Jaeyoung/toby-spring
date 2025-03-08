@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -61,5 +63,18 @@ public class UserDaoTest {
 
         dao.add(user3);
         assertThat(dao.getCount(), is(3));
+    }
+
+    @Test
+    public void getUserFailure() throws SQLException {
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+
+        UserDao dao = context.getBean("userDao", UserDao.class);
+        dao.deleteAll();
+        assertThat(dao.getCount(), is(0));
+
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            dao.get("unknown_id");
+        });
     }
 }
