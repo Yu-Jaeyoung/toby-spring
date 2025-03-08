@@ -1,5 +1,6 @@
 package springbook.user;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +22,19 @@ public class UserDaoTest {
     @Autowired
     private UserDao dao;
 
+    private User user1;
+    private User user2;
+    private User user3;
+
+    @BeforeEach
+    void setUp() {
+        this.user1 = new User("tom", "톰", "password");
+        this.user2 = new User("Tim", "팀", "password");
+        this.user3 = new User("Jay", "제이", "password");
+    }
+
     @Test
     void addAndGet() throws SQLException {
-        User user1 = new User("park", "박", "password");
-        User user2 = new User("Han", "한", "password");
 
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
@@ -44,9 +54,6 @@ public class UserDaoTest {
 
     @Test
     void count() throws SQLException {
-        User user1 = new User("tom", "톰", "password");
-        User user2 = new User("Tim", "팀", "password");
-        User user3 = new User("Jay", "제이", "password");
 
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
