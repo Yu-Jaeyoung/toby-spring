@@ -22,20 +22,23 @@ public class UserDaoTest {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
 
         UserDao dao = context.getBean("userDao", UserDao.class);
+        User user1 = new User("park", "박", "password");
+        User user2 = new User("Han", "한", "password");
 
         dao.deleteAll();
         assertThat(dao.getCount(), is(0));
 
+        dao.add(user1);
+        dao.add(user2);
+        assertThat(dao.getCount(), is(2));
 
-        User user = new User("jack", "jaeyoung", "password");
+        User userGet1 = dao.get(user1.getId());
+        assertThat(userGet1.getName(), is(user1.getName()));
+        assertThat(userGet1.getPassword(), is(user1.getPassword()));
 
-        dao.add(user);
-        assertThat(dao.getCount(), is(1));
-
-        User user2 = dao.get(user.getId());
-
-        assertThat(user2.getName(), is(user.getName()));
-        assertThat(user2.getPassword(), is(user.getPassword()));
+        User userGet2 = dao.get(user1.getId());
+        assertThat(userGet2.getName(), is(user1.getName()));
+        assertThat(userGet2.getPassword(), is(user1.getPassword()));
     }
 
     @Test
