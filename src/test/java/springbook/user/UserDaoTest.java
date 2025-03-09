@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.test.context.ContextConfiguration;
 import springbook.user.dao.UserDao;
+import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
@@ -38,9 +39,9 @@ public class UserDaoTest {
 
     @BeforeEach
     void setUp() {
-        this.user1 = new User("B", "비", "password");
-        this.user2 = new User("C", "씨", "password");
-        this.user3 = new User("A", "에이", "password");
+        this.user1 = new User("B", "비", "password", Level.BASIC, 1, 0);
+        this.user2 = new User("C", "씨", "password", Level.SILVER, 55, 10);
+        this.user3 = new User("A", "에이", "password", Level.GOLD, 100, 40);
     }
 
     @Test
@@ -54,12 +55,10 @@ public class UserDaoTest {
         assertThat(dao.getCount(), is(2));
 
         User userGet1 = dao.get(user1.getId());
-        assertThat(userGet1.getName(), is(user1.getName()));
-        assertThat(userGet1.getPassword(), is(user1.getPassword()));
+        checkSameUser(userGet1, user1);
 
-        User userGet2 = dao.get(user1.getId());
-        assertThat(userGet2.getName(), is(user1.getName()));
-        assertThat(userGet2.getPassword(), is(user1.getPassword()));
+        User userGet2 = dao.get(user2.getId());
+        checkSameUser(userGet2, user2);
     }
 
     @Test
@@ -149,5 +148,8 @@ public class UserDaoTest {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user2.getRecommend()));
     }
 }
