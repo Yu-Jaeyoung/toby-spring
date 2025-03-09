@@ -1,11 +1,7 @@
 package springbook.user.service;
 
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.internet.AddressException;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -14,7 +10,6 @@ import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
 import java.util.List;
-import java.util.Properties;
 
 public class UserService {
     public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
@@ -71,21 +66,16 @@ public class UserService {
     }
 
     private void sendUpgradeEMail(User user) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "mail.test.org");
-        Session session = Session.getDefaultInstance(props, null);
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("mail.server.com");
 
-        MimeMessage message = new MimeMessage(session);
-        try {
-            message.setFrom(new InternetAddress("admin@test.com"));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-            message.setSubject("Upgrade 안내");
-            message.setText("사용자님의 등급이 " + user.getLevel().name() + "로 업그레이드되었습니다.");
-        } catch (AddressException e) {
-            throw new RuntimeException(e);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setFrom("admin@test.com");
+        mailMessage.setSubject("Upgrade 안내");
+        mailMessage.setText("사용자님의 등급이 " + user.getLevel().name());
+
+        mailSender.send(mailMessage);
     }
 
     public void add(User user) {
