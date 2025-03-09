@@ -13,11 +13,11 @@ public class UserDao {
     public UserDao() {
     }
 
-    public void setJdbcContext(JdbcContext jdbcContext) {
-        this.jdbcContext = jdbcContext;
-    }
-
     public void setDataSource(DataSource dataSource) {
+        this.jdbcContext = new JdbcContext();       // JdbcContext 생성 (IoC)
+
+        this.jdbcContext.setDataSource(dataSource); // 의존 오브젝트 주입 (DI)
+
         this.dataSource = dataSource;
     }
 
