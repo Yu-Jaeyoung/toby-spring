@@ -15,6 +15,8 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
 
 @SpringBootTest
 @ContextConfiguration(locations = "/applicationContext.xml")
@@ -31,11 +33,11 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         users = Arrays.asList(
-                new User("A", "에이", "p1", Level.BASIC, 49, 0),
-                new User("B", "비", "p2", Level.BASIC, 50, 0),
-                new User("C", "씨", "p3", Level.SILVER, 60, 29),
-                new User("D", "디", "p4", Level.SILVER, 60, 30),
-                new User("E", "이", "p5", Level.GOLD, 100, 100)
+                new User("A", "에이", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0),
+                new User("B", "비", "p2", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
+                new User("C", "씨", "p3", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD - 1),
+                new User("D", "디", "p4", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
+                new User("E", "이", "p5", Level.GOLD, 100, Integer.MAX_VALUE)
         );
     }
 
