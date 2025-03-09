@@ -9,7 +9,6 @@ import java.sql.*;
 import java.util.List;
 
 public class UserDao {
-    private DataSource dataSource;
     private JdbcTemplate jdbcTemplate;
 
     public UserDao() {
@@ -17,7 +16,6 @@ public class UserDao {
 
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-        this.dataSource = dataSource;
     }
 
     public void add(final User user) {
@@ -50,34 +48,6 @@ public class UserDao {
 
     public int getCount() throws SQLException {
         return this.jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
-    }
-
-    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = dataSource.getConnection();
-
-            ps = stmt.makePreparedStatement(c);
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                }
-            }
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
     }
 
     public List<User> getAll() {
