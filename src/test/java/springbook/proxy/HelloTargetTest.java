@@ -15,4 +15,13 @@ public class HelloTargetTest {
         assertThat(hello.sayThankYou("Toby"), is("Thank you Toby"));
 
     }
+
+    @Test
+    public void upperProxy() {
+        Hello proxiedHello = new HelloUppercase(new HelloTarget());
+
+        assertThat(proxiedHello.sayHello("Toby"), is("HELLO TOBY"));
+        assertThat(proxiedHello.sayHi("Toby"), is("HI TOBY"));
+        assertThat(proxiedHello.sayThankYou("Toby"), is("THANK YOU TOBY"));
+    }
 }
